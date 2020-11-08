@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 
 import StateSelector from './StateSelector'
 import OrganizationSelector from './OrganizationSelector'
 import server from '../apis/server'
 
-const SearchForm = () => {
+const SearchForm = ({ setResults }) => {
 
     const [ formData, setFormData ] = useState({ firstName: '', lastName: '', region: '', sourceID: '' })
+
 
     const updateRegion = (selectedRegion) => setFormData({ ...formData, region: selectedRegion })
     const updateSourceID = (selectedSource) => setFormData({ ...formData, sourceID: selectedSource})
     const updateFirstName = (e) => setFormData({ ...formData, firstName: e.target.value })
     const updateLastName = (e) => setFormData({ ...formData, lastName: e.target.value })
 
-    const handleSubmit = () => server.post('/formsubmit', formData).then((res) => console.log(res.data))
+    const handleSubmit = () => server.post('/formsubmit', formData).then((res) => setResults(res.data.records))
 
     return(
         <div>
@@ -47,6 +49,7 @@ const SearchForm = () => {
                         </div>
                     </div>
                 </form>
+                <Link to="/results">Results</Link>
             </div>
         </div>
     )
